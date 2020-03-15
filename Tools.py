@@ -5,7 +5,7 @@ import threading
 from queue import Queue
 from vk_api.exceptions import ApiError
 from vk_api.longpoll import VkLongPoll, VkEventType
-# User LongPoll dor VK 
+# User LongPoll for VK 
 def watch(q,token):
     ids = [562261850, 367916459]
     chat_name = 'тестирование'
