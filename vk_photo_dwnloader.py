@@ -4,7 +4,6 @@ import threading
 from sys import exit
 from os import chdir
 from time import sleep
-from random import randint
 
 v = 5.90 #-- API current version
 chdir('D:\VK-Photos') # -- working directory for save photos
@@ -18,7 +17,8 @@ class Download_Photos(object):
         self.access_token = token
         self.user_id =  user_id
         self.name = 'photo'
-        self.random_id = randint(1,12000)
+        self.num = 0
+        self.max_count = 6000
 
     @staticmethod
     def Download(file_name, content):  # Создаем функцию-загрузчик
@@ -38,9 +38,11 @@ class Download_Photos(object):
             for self.URL in photo_list:  # создаем цикл запросов
                 r = requests.get(self.URL, stream=True)  # ==ОТПРАВЛЯЕМ ЗАПРОС ПО КАЖДОЙ ССЫЛКЕ
                 if r.status_code == 200:  # -- ЕСЛИ ВСЕ В ПОРЯДКЕ ТО..
-                    self.name = self.name + str(self.random_id)
-                    self.Download(self.name + '.jpg', r.content)  # -- ЗАГРУЖАЕМ ВСЕ СЕБЕ В ПАПКУ
-                    sleep(1)  # -- устанавливаем интервал в одну секунду
+                    while self.num <= self.max_count:
+                        self.num+=1
+                        self.name = self.name + str(self.num)
+                        self.Download(self.name + '.jpg', r.content)  # -- ЗАГРУЖАЕМ ВСЕ СЕБЕ В ПАПКУ
+                        sleep(1)  # -- устанавливаем интервал в одну секунду
         except FileExistsError:
             pass
 '''
