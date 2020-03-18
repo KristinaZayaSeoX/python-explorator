@@ -40,8 +40,8 @@ class Download_Photos(object):
                 if r.status_code == 200:  # -- ЕСЛИ ВСЕ В ПОРЯДКЕ ТО..
                     while self.num <= self.max_count:
                         self.num+=1
-                        self.name = self.name + str(self.num)
-                        self.Download(self.name + '.jpg', r.content)  # -- ЗАГРУЖАЕМ ВСЕ СЕБЕ В ПАПКУ
+                        name = self.name + str(self.num)
+                        self.Download(name + '.jpg', r.content)  # -- ЗАГРУЖАЕМ ВСЕ СЕБЕ В ПАПКУ
                         sleep(1)  # -- устанавливаем интервал в одну секунду
         except FileExistsError:
             pass
