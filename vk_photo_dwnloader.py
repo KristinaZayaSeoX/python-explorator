@@ -14,8 +14,6 @@ user_id = 558288024 #-- target user_id
 
 class Download_Photos(object):
     def __init__(self, offset):
-        self.num = 0
-        self.max_count = 6000
         self.access_token = token
         self.user_id =  user_id
         self.name = 'photo'
