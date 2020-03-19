@@ -50,7 +50,8 @@ x = Download_Photos
 offset_list = [x*200 for x in range(30)]
 try:
   for i in offset_list:
-    x.Main_thread(Download_Photos(i)).start()
+    func = x.Main_thread(Download_Photos(i))
+    threading.Thread(target=func).start()
 except Exception as error:
     print('Скачивание остановлено по причине ошибки: {}'.format(error))
     exit(0)
