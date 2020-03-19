@@ -4,21 +4,22 @@ import threading
 from sys import exit
 from os import chdir
 from time import sleep
+from random import randint
 
 v = 5.90 #-- API current version
 chdir('D:\VK-Photos') # -- working directory for save photos
 f = open('token.txt') #-- token file
 token =  [line for line in f.readlines()] #-- valid VK token
-user_id = 503476215 #-- target user_id
+user_id = 558288024 #-- target user_id
 
 class Download_Photos(object):
     def __init__(self, offset):
-        self.offset = offset
+        self.num = 0
+        self.max_count = 6000
         self.access_token = token
         self.user_id =  user_id
         self.name = 'photo'
-        self.num = 0
-        self.max_count = 6000
+        self.offset = offset
 
     @staticmethod
     def Download(file_name, content):  # Создаем функцию-загрузчик
@@ -38,29 +39,20 @@ class Download_Photos(object):
             for self.URL in photo_list:  # создаем цикл запросов
                 r = requests.get(self.URL, stream=True)  # ==ОТПРАВЛЯЕМ ЗАПРОС ПО КАЖДОЙ ССЫЛКЕ
                 if r.status_code == 200:  # -- ЕСЛИ ВСЕ В ПОРЯДКЕ ТО..
-                    while self.num <= self.max_count:
-                        self.num+=1
-                        name = self.name + str(self.num)
-                        self.Download(name + '.jpg', r.content)  # -- ЗАГРУЖАЕМ ВСЕ СЕБЕ В ПАПКУ
-                        sleep(1)  # -- устанавливаем интервал в одну секунду
+                   name = self.name + str(randint(1,12000))
+                   self.Download(name + '.jpg', r.content)  # -- ЗАГРУЖАЕМ ВСЕ СЕБЕ В ПАПКУ
+                   sleep(1)  # -- устанавливаем интервал в одну секунду
         except FileExistsError:
             pass
 '''
 Скачиваем нужное количество фотографий
 к себе на компьютер
 '''
-def main():
-  t = Download_Photos
-  try:
-   max_count = 6000
-   i = 0
-   while i <= max_count:
-       i += 200
-       thread = t.Main_thread(Download_Photos(i))
-       threads = threading.Thread(target=thread)
-       threads.start()
-  except Exception as e:
-      print('Error!:{} Please,try again...').format(e)
-      pass
-if __name__ == "__main__":
-    main()
+x = Download_Photos
+offset_list = [x*200 for x in range(30)]
+try:
+  for i in offset_list:
+    x.Main_thread(Download_Photos(i)).start()
+except Exception as error:
+    print('Скачивание остановлено по причине ошибки: {}'.format(error))
+    exit(0)
