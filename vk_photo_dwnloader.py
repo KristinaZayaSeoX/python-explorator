@@ -7,10 +7,10 @@ from time import sleep
 from random import randint
 
 v = 5.90 #-- API current version
-chdir('D:\VK-Photos') # -- working directory for save photos
+chdir('path to file') # -- working directory for save photos
 f = open('token.txt') #-- token file
 token =  [line for line in f.readlines()] #-- valid VK token
-user_id = 558288024 #-- target user_id
+user_id = user_id #-- target user_id
 
 class Download_Photos(object):
     def __init__(self, offset):
