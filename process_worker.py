@@ -5,7 +5,7 @@ import os
 import time
 import psutil
 from sys import exit
-dirname = 'D:\VK-Scripts'
+dirname = 'some path to working directory'
 help_msg = 'for more information print -help\n for exit print exit\n for kill process enter process id..'
 help_menu = ['p -start => process start','p -chdir => change directory','p -ldir => viewing content of directory','p -list => create list of active processes']
 print(help_msg)              
