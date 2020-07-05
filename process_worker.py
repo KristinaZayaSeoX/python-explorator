@@ -99,7 +99,7 @@ class Subpro:
             print(os.listdir(_cwd))
         else:
             pass
-commands = ['p -ldir','-help','exit']
+commands = ['p -ldir','-help','exit','p -chdir']
 def main():
     while True:
         try:
