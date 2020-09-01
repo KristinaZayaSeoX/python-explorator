@@ -24,7 +24,7 @@ class Req:
         except Exception as ems:
                print(ems)
                pass
-    
+        
     @staticmethod
     def sleep_time(value):
         tsl = sleep(value)
@@ -34,17 +34,21 @@ class Req:
     def print_info(self):
         content = self.get_response
         print(f'получены данные: {content()}')
+'''
+Набор основных констант
+для корректной работы поставьте свои данные
+'''
 #----------------------------------------------------#
-chdir('D:\Coding Python')
-token_file = open('token.txt')
+chdir('path name') # -- путь рабочей директории
+token_file = open('token.txt') # -- файл с токеном ВК, должен лежать на одном уровне с py-файлом
 token = [line for line in token_file.readlines()]
 url = 'https://api.vk.com/method/'
 random_id = 0
-Chat_Id = 161
+Chat_Id = 161 #-- id тестовой беседы
 v = 5.103
-user_bot = 537298000
+user_bot = 'id бота, должно быть целое число' #--example - 1989843747 
 s = '💬'
-Info = '💬Привет! Я - ботиха Кристины. ✍🏻Мои команды: --story, --anime, --pozor, --help me  Мой функционал постепенно улучшается, обо всех изменениях вы можете узнать у моей создательницы *id530720952 (Кристины)✅ '
+Info = 'приветственное сообщение бота'
 #----------------------------------------------------#
 class GetVK(Req):
     def __init__(self, method, params):
@@ -65,7 +69,7 @@ class GetVK(Req):
         print(self.ms)
         return self.ms
 
-#GetVK.print_info(GetVK('messages.send',configs[3])) #---example request---#
+#GetVK.print_info(GetVK('messages.send',params)) #---example request---#
 
 class NewReqTestBS(Req):
     def __init__(self):
@@ -82,7 +86,6 @@ class NewReqTestBS(Req):
     def get_bs4(self):
         response = requests.get(self.url)
         bs = BeautifulSoup(response.text, 'html.parser')
-        self.sleep_time(1)
         find_dv = bs.find_all('a', {'class':'continue-reading-link'})
         self.data = []
         for row in find_dv:
@@ -116,7 +119,12 @@ def VK_Post():
                 post_list.append(attachments)
     result_post_list = post_list[1:]
     return result_post_list
-
+'''
+Основная функция
+< Наполняем конфиги своим функционалом 
+с использованием созданных  выше классов и функций
+меняя дефолтные сообщения на нужные методы с параметрами >
+'''
 def Main():
     message_id = ''
     while True:
@@ -158,6 +166,11 @@ def Main():
       except Exception as ems:
          print('error: ', ems)
          exit(0)
+'''
+Здесь можно создать разные потоки 
+для основной функции, для создания логов
+чтения-записи, изменения БД и так далее..
+'''
 Thread(target=Main).start()
 
 
