@@ -59,8 +59,8 @@ class GetVK(Req):
 
     def get_vk(self):
         self.request = f'{self.url}{self.method}/'
-        self.sleep_time(0.55)
         self.response = requests.get(self.request,params=self.params)
+        self.sleep_time(0.55)
         return self.response.json()
 
     def print_info(self):
