@@ -15,16 +15,16 @@ class Req:
       
     def get_response(self):
         try:
-            self.response = requests.get(self.url)
+            self.response = requests.get(self.url, params=self.params)
             if self.response.status_code == 200:
-               print(self.response.status_code)
-               return self.response.content
+               print(f'server status: {self.response.status_code}')
+               return self.response
             else:
                print('error!')
         except Exception as ems:
                print(ems)
                pass
-        
+    
     @staticmethod
     def sleep_time(value):
         tsl = sleep(value)
@@ -34,33 +34,28 @@ class Req:
     def print_info(self):
         content = self.get_response
         print(f'получены данные: {content()}')
-'''
-Набор основных констант
-для корректной работы поставьте свои данные
-'''
 #----------------------------------------------------#
-chdir('path name') # -- путь рабочей директории
-token_file = open('token.txt') # -- файл с токеном ВК, должен лежать на одном уровне с py-файлом
+chdir('D:\Coding Python')
+token_file = open('token.txt')
 token = [line for line in token_file.readlines()]
-url = 'https://api.vk.com/method/'
 random_id = 0
-Chat_Id = 161 #-- id тестовой беседы
+Chat_Id = 161
 v = 5.103
-user_bot = 'id бота, должно быть целое число' #--example - 1989843747 
+user_bot = 537298000
 s = '💬'
-Info = 'приветственное сообщение бота'
+Info = '💬Привет! Я - ботиха Кристины. ✍🏻Мои команды: --story, --anime, --pozor, --help me  Мой функционал постепенно улучшается, обо всех изменениях вы можете узнать у моей создательницы *id530720952 (Кристины)✅ '
 #----------------------------------------------------#
-class GetVK(Req):
+class VKBot_Interface:
     def __init__(self, method, params):
-        self.url = url
+        self.url = 'https://api.vk.com/method/'
         self.method = method
         self.params = params
         self.msg = ' done!'
 
     def get_vk(self):
         self.request = f'{self.url}{self.method}/'
-        self.response = requests.get(self.request,params=self.params)
-        self.sleep_time(0.55)
+        sleep(0.55)
+        self.response = Req.get_response(Req(self.request,params=self.params))
         return self.response.json()
 
     def print_info(self):
@@ -69,46 +64,48 @@ class GetVK(Req):
         print(self.ms)
         return self.ms
 
-#GetVK.print_info(GetVK('messages.send',params)) #---example request---#
 
 class NewReqTestBS(Req):
     def __init__(self):
         self.url = 'https://istoriipro.ru/'
+        super().__init__(self.url)
 
-    def response_get(self):
+    def response_get(self,url,params):
         self._response = super().get_response()
         return self._response
 
     def print_info(self):
-        response = self.response_get()
+        response = self.response_get(self.url, None)
         print(f'{response}\nplease parse data..')
     
     def get_bs4(self):
-        response = requests.get(self.url)
+        response = self.response_get(self.url, None)
         bs = BeautifulSoup(response.text, 'html.parser')
+        self.sleep_time(1)
         find_dv = bs.find_all('a', {'class':'continue-reading-link'})
         self.data = []
         for row in find_dv:
             result = row['href']
             self.data.append(result)
         return self.data
-#==========================================#
+
+#= ==============================================================#
 req = Req
-vk = GetVK
+vk = VKBot_Interface
 info = Req.print_info
 bs = NewReqTestBS
 chat_param = {'access_token':token, 'count':1, 'v':v}
 rand_link = NewReqTestBS.get_bs4(NewReqTestBS())
-response = vk.get_vk(GetVK('photos.get',{'access_token':token,'owner_id':537298000, 'album_id':274728700, 'count':200, 'v':v}))
+response = vk.get_vk(VKBot_Interface('photos.get',{'access_token':token,'owner_id':537298000, 'album_id':274728700, 'count':200, 'v':v}))
 result = response['response']['items']
 photos = []
 for x in result:
     pid = x['id']
     photo_attachment = (f'photo{user_bot}_{pid}')
     photos.append(photo_attachment)
-#==========================================#
+#================================================================#
 def VK_Post():
-    response = vk.get_vk(GetVK('wall.get',{'access_token':token,'owner_id':-152433395,'count':10, 'filter':'owner', 'v':v}))
+    response = vk.get_vk(VKBot_Interface('wall.get',{'access_token':token,'owner_id':-152433395,'count':10, 'filter':'owner', 'v':v}))
     owner = -152433395
     result = response['response']['items']
     post_list = []
@@ -119,17 +116,12 @@ def VK_Post():
                 post_list.append(attachments)
     result_post_list = post_list[1:]
     return result_post_list
-'''
-Основная функция
-< Наполняем конфиги своим функционалом 
-с использованием созданных  выше классов и функций
-меняя дефолтные сообщения на нужные методы с параметрами >
-'''
-def Main():
+
+def VK_Bot():
     message_id = ''
     while True:
       try:
-          response = vk.get_vk(GetVK('messages.getConversations',chat_param))
+          response = vk.get_vk(VKBot_Interface('messages.getConversations',chat_param))
           print(response)
           sleep(0.55)
           items = response['response']['items']
@@ -148,15 +140,17 @@ def Main():
                  {'access_token':token,'chat_id':chat_id,'attachment':random.choice(VK_Post()),'random_id':0,'v':v},
                  {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.4','random_id':0,'v':v},
                  {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.5','random_id':0,'v':v},
-                 {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.6','random_id':0,'v':v}]
+                 {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.6','random_id':0,'v':v}
+                         ]
                 commands = {
-                 'vk_api1':GetVK('messages.send',config[0]),
-                  'vk_api2':GetVK('messages.send',config[1]),
-                  'vk_api3':GetVK('messages.send',config[2]),
-                  'vk_api4':GetVK('messages.send',config[3]),
-                  'vk_api5':GetVK('messages.send',config[4]),
-                  'vk_api6':GetVK('messages.send',config[5]),
-                  'vk_api7':GetVK('messages.send',config[6])}
+                  'vk_api1':VKBot_Interface('messages.send',config[0]),
+                  'vk_api2':VKBot_Interface('messages.send',config[1]),
+                  'vk_api3':VKBot_Interface('messages.send',config[2]),
+                  'vk_api4':VKBot_Interface('messages.send',config[3]),
+                  'vk_api5':VKBot_Interface('messages.send',config[4]),
+                  'vk_api6':VKBot_Interface('messages.send',config[5]),
+                  'vk_api7':VKBot_Interface('messages.send',config[6])
+                           }
                 command_config = [('--story',commands['vk_api1']),('--anime',commands['vk_api2']),('--info',commands['vk_api3']),('--pozor',commands['vk_api4'])]
                 for x in command_config:
                     command = x[0]
@@ -166,12 +160,49 @@ def Main():
       except Exception as ems:
          print('error: ', ems)
          exit(0)
-'''
-Здесь можно создать разные потоки 
-для основной функции, для создания логов
-чтения-записи, изменения БД и так далее..
-'''
-Thread(target=Main).start()
+
+class TeleBot_Interface:
+    def __init__(self):
+        self.token = '' # Поставить сюда токен своего телеграм-бота
+        self.bot_auth = 'bot' + self.token
+        self.API_link = f'https://api.telegram.org/{self.bot_auth}/'
+        self.Update_Link = f'{self.API_link}getUpdates?offset=-1'
+
+    def updates_get(self):
+        response = req.get_response(Req(self.Update_Link))
+        return response.json()
+    
+    def send_message(self,chat, text):
+        params = {'chat_id': chat, 'text': text}
+        response = requests.post(self.API_link + 'sendMessage', data=params)
+        return response
+
+    def bot_polling(self):
+        while True:
+            self.update = self.updates_get()
+            print(self.update)
+            sleep(3)
+            self.update_id = self.update['result'][0]['update_id']
+            self.new_update_id = self.updates_get()['result'][0]['update_id']
+            if self.new_update_id != self.update_id:
+                print('/get updates')
+                try:
+                    message_source = self.updates_get()['result'][0]['message']
+                    chat_id = message_source['chat']['id']
+                    message_text = message_source['text']
+                    self.send_message(chat_id,message_text)
+                except (KeyError, IndexError):
+                    pass
+def TeleBot():
+    try:
+        t_bot = TeleBot_Interface()
+        t_bot.bot_polling()
+    except requests.ConnectionError:
+        exit(0)
+
+threads = {'t1':Thread(target=TeleBot), 't2':Thread(target=VK_Bot)}   
+for key,thread in threads.items():
+    thread.start()
 
 
 
