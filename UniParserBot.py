@@ -35,8 +35,8 @@ class Req:
         content = self.get_response
         print(f'получены данные: {content()}')
 #----------------------------------------------------#
-chdir('D:\Coding Python')
-token_file = open('token.txt')
+chdir('path') # Путь к рабочей директории
+token_file = open('token.txt') # Токен вк-бота
 token = [line for line in token_file.readlines()]
 random_id = 0
 Chat_Id = 161
