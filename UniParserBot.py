@@ -132,7 +132,7 @@ def SetSQL(value):
     cursor = connect.cursor()
     cursor.execute('INSERT INTO text VALUES("{}")'.format(value))
     connect.commit()
-#-----------------------------#
+
 def VK_Bot():
     message_id = ''
     while True:
