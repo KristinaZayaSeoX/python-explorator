@@ -153,10 +153,10 @@ def VK_Bot():
                  {'access_token':token,'chat_id':chat_id,'message':random.choice(rand_link),'random_id':0,'v':v},
                  {'access_token':token,'chat_id':chat_id,'attachment':random.choice(photos),'random_id':0,'v':v},
                  {'access_token':token,'chat_id':chat_id,'message':Info,'random_id':0,'v':v},
-                 {'access_token':token,'chat_id':chat_id,'attachment':random.choice(VK_Post()),'random_id':0,'v':v},
-                 {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.4','random_id':0,'v':v},
-                 {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.5','random_id':0,'v':v},
-                 {'access_token':token,'chat_id':chat_id,'message':'testyrovanye 1.6','random_id':0,'v':v}
+                 {'access_token':token,'chat_id':chat_id,'attachment':random.choice(VK_Post(-152433395)),'random_id':0,'v':v},
+                 {'access_token':token,'chat_id':chat_id,'message':random.choice(GetSQL('text')),'random_id':0,'v':v},
+                 {'access_token':token,'chat_id':chat_id,'message':f'{s}Фраза успешно добавлена в базу данных!','random_id':0,'v':v},
+                 {'access_token':token,'chat_id':chat_id,'attachment':random.choice(VK_Post(-188295754)),'random_id':0,'v':v}
                          ]
                 commands = {
                   'vk_api1':VKBot_Interface('messages.send',config[0]),
