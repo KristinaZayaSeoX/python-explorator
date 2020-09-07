@@ -118,6 +118,7 @@ def VK_Post(owner):
     return result_post_list
 
 #--- SQL commands function --#
+
 def GetSQL(tab):
     connect = sqlite3.connect('Data.db')
     cursor = connect.cursor()
