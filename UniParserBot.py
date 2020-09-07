@@ -178,12 +178,12 @@ def VK_Bot():
                        sql = GetSQL('text')
                        sql_list = [x[0] for x in sql]
                        print(sql_list)
-                    if TEXT[1] in sql_list:
-                       vk.get_vk(VKBot_Interface('messages.send', {'access_token':token,'chat_id':chat_id,'message':'⚠Эта фраза уже есть в базе данных!','random_id':0,'v':v})) 
-                    else:
-                       SetSQL(TEXT[1])
-                       sleep(0.55)
-                       vk.get_vk(VKBot_Interface('messages.send',config[5]))  
+                       if TEXT[1] in sql_list:
+                          vk.get_vk(VKBot_Interface('messages.send', {'access_token':token,'chat_id':chat_id,'message':'⚠Эта фраза уже есть в базе данных!','random_id':0,'v':v})) 
+                       else:
+                          SetSQL(TEXT[1])
+                          sleep(0.55)
+                          vk.get_vk(VKBot_Interface('messages.send',config[5]))  
       except Exception as ems:
          print('error: ', ems)
          exit(0)
