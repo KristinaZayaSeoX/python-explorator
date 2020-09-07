@@ -104,9 +104,9 @@ for x in result:
     photo_attachment = (f'photo{user_bot}_{pid}')
     photos.append(photo_attachment)
 #================================================================#
-def VK_Post():
+def VK_Post(owner):
     response = vk.get_vk(VKBot_Interface('wall.get',{'access_token':token,'owner_id':-152433395,'count':10, 'filter':'owner', 'v':v}))
-    owner = -152433395
+    owner = owner
     result = response['response']['items']
     post_list = []
     for items in result:
