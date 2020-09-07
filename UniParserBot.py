@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import requests
 import random
+import sqlite3
 from bs4 import BeautifulSoup
 from os import chdir
 from time import sleep
@@ -117,6 +118,21 @@ def VK_Post(owner):
     result_post_list = post_list[1:]
     return result_post_list
 
+#--- SQL commands function --#
+ 
+def GetSQL(tab):
+    connect = sqlite3.connect('Data.db')
+    cursor = connect.cursor()
+    data = cursor.execute('SELECT*FROM {}'.format(tab))
+    value = data.fetchall()
+    return value
+
+def SetSQL(value):
+    connect = sqlite3.connect('Data.db')
+    cursor = connect.cursor()
+    cursor.execute('INSERT INTO text VALUES("{}")'.format(value))
+    connect.commit()
+#-----------------------------#
 def VK_Bot():
     message_id = ''
     while True:
@@ -157,6 +173,17 @@ def VK_Bot():
                     execute = x[1]
                     if text == command and user != user_bot:
                         vk.get_vk(execute)
+                TEXT = text.split('/')
+                    if TEXT[0] == 'добавить фразу':
+                       sql = GetSQL('text')
+                       sql_list = [x[0] for x in sql]
+                       print(sql_list)
+                    if TEXT[1] in sql_list:
+                       vk.get_vk(VKBot_Interface('messages.send', {'access_token':token,'chat_id':chat_id,'message':'⚠Эта фраза уже есть в базе данных!','random_id':0,'v':v})) 
+                    else:
+                       SetSQL(TEXT[1])
+                       sleep(0.55)
+                       vk.get_vk(VKBot_Interface('messages.send',config[5]))  
       except Exception as ems:
          print('error: ', ems)
          exit(0)
