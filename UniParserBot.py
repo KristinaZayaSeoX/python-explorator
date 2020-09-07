@@ -119,7 +119,6 @@ def VK_Post(owner):
     return result_post_list
 
 #--- SQL commands function --#
- 
 def GetSQL(tab):
     connect = sqlite3.connect('Data.db')
     cursor = connect.cursor()
@@ -132,6 +131,15 @@ def SetSQL(value):
     cursor = connect.cursor()
     cursor.execute('INSERT INTO text VALUES("{}")'.format(value))
     connect.commit()
+    
+def DelSQL(value):
+    connect = sqlite3.connect("Data.db", check_same_thread=False)
+    cursor = connect.cursor()
+    SQL_DELETE = 'DELETE FROM text WHERE field="{}"'.format(value)
+    cursor.execute(SQL_DELETE)
+    connect.commit()
+    
+#--- VK_Bot main-thread function ---#
 
 def VK_Bot():
     message_id = ''
@@ -183,7 +191,15 @@ def VK_Bot():
                        else:
                           SetSQL(TEXT[1])
                           sleep(0.55)
-                          vk.get_vk(VKBot_Interface('messages.send',config[5]))  
+                          vk.get_vk(VKBot_Interface('messages.send',config[5])) 
+                    elif TEXT[0] == 'удалить фразу':
+                        try:
+                           DelSQL(TEXT[1])
+                           sleep(0.55)
+                           vk.get_vk(VKBot_Interface('messages.send', {'access_token':token,'chat_id':chat_id,'message':'⚠Эта фраза удалена из базы данных!','random_id':0,'v':v})) 
+                        except sqlite3.DatabaseError as sql_error:
+                           print(sql_error)
+                           pass
       except Exception as ems:
          print('error: ', ems)
          exit(0)
