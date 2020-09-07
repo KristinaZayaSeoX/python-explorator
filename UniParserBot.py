@@ -65,7 +65,6 @@ class VKBot_Interface:
         print(self.ms)
         return self.ms
 
-
 class NewReqTestBS(Req):
     def __init__(self):
         self.url = 'https://istoriipro.ru/'
@@ -203,6 +202,8 @@ def VK_Bot():
       except Exception as ems:
          print('error: ', ems)
          exit(0)
+        
+# -- example test echo-bot for telegram ---#
 
 class TeleBot_Interface:
     def __init__(self):
